@@ -19,8 +19,8 @@ app.use(cors(corsOptions))
 app.use('/api/auth', auth)
 app.use('/api/read', read)
 
-const port = 5004
+const port = 5005
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Ample-server listening on port ${port}`)
 })
