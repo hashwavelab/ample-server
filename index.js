@@ -16,8 +16,8 @@ var corsOptions = {
     origin: 'http://localhost:3000',
 }
 app.use(cors(corsOptions))
-app.use('/api/auth', auth)
-app.use('/api/read', read)
+app.use('/auth', auth)
+app.use('/read', read)
 
 const port = 5005
 
