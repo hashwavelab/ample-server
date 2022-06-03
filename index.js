@@ -3,7 +3,7 @@ const auth = require('./api/auth')
 const read = require('./api/read')
 const cors = require('cors')
 const MongoClient = require('./utils/mongoClient')
-const Assembler = require('./Assembler.js')
+const Assembler = require('./assembler.js')
 
 global.globalMongoClient = new MongoClient();
 setTimeout(() => {
