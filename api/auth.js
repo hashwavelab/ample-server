@@ -7,7 +7,7 @@ const CONFIG = require('../utils/config');
 var jsonParser = bodyParser.json()
 let massageToSignMap = new Map()
 
-function verifySignature(address, signature) {
+function verifySignature(user, address, signature) {
     if (massageToSignMap.has(address)) {
         let msg = massageToSignMap.get(address)
         let recoveredAddress = ethers.utils.verifyMessage(msg, signature)
@@ -79,7 +79,7 @@ router.post('/update/document', jsonParser, async (req, res) => {
         if (!user) {
             res.status(400).send("Get off dude!")
         } else {
-            if (verifySignature(address, signature)) {
+            if (verifySignature(user, address, signature)) {
                 let resCode = await globalAssembler.update(address, collectionName, id, modDic)
                 res.status(resCode).send()
             } else {
@@ -111,7 +111,7 @@ router.post('/insert/collection', jsonParser, async (req, res) => {
         if (!user) {
             res.status(400).send("Get off dude!")
         } else {
-            if (verifySignature(address, signature)) {
+            if (verifySignature(user, address, signature)) {
                 let resCode = await globalAssembler.insertCollection(collectionName)
                 res.status(resCode).send()
             } else {
@@ -144,7 +144,7 @@ router.post('/insert/document', jsonParser, async (req, res) => {
         if (!user) {
             res.status(400).send("Get off dude!")
         } else {
-            if (verifySignature(address, signature)) {
+            if (verifySignature(user, address, signature)) {
                 let resCode = await globalAssembler.insertDocument(collectionName, modDic)
                 res.status(resCode).send()
             } else {
