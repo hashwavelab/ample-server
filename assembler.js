@@ -50,15 +50,14 @@ class Assembler {
     async insertDocument(collectionName, rawDoc) {
         const collection = globalMongoClient.getCollection(collectionName);
         return new Promise(async (resolve, _reject) => {
-            await collection.insertOne(rawDoc, function (err, res) {
-                if (err) {
-                    console.log('Error occurred while inserting');
-                    resolve(400)
-                } else {
-                    console.log('Document Inserted!');
-                    resolve(200)
-                }
-            })
+            try {
+                let res = await collection.insertOne(rawDoc) 
+                console.log('Document Inserted!');
+                resolve([200, res.insertedId.toString()])  
+            } catch (error) {
+                console.log('Error occurred while inserting');
+                resolve([400, ""])
+            }
         })
     }
 

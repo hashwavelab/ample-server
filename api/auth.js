@@ -145,8 +145,8 @@ router.post('/insert/document', jsonParser, async (req, res) => {
             res.status(400).send("Get off dude!")
         } else {
             if (verifySignature(user, address, signature)) {
-                let resCode = await globalAssembler.insertDocument(collectionName, modDic)
-                res.status(resCode).send()
+                let res = await globalAssembler.insertDocument(collectionName, modDic)
+                res.status(res[0]).send(res[1])
             } else {
                 res.status(400).send()
             }
