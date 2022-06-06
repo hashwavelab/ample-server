@@ -101,7 +101,7 @@ class Collection {
                     }
                     break;
                 case "delete":
-                    this.collectionMap.delete(next.documentKey._id.toString())
+                    delete this.collectionMap[next.documentKey._id.toString()]
                     break;
                 default:
                     break;
