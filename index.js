@@ -16,7 +16,6 @@ var corsOptions = {
     origin: 'https://wavefront.hashwave.io',
 }
 app.use(cors(corsOptions));
-app.use(auth(config));
 
 app.use('/auth', ethSign);
 app.use('/read', read);
