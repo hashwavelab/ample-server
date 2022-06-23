@@ -4,6 +4,9 @@ const ethers = require ('ethers');
 const router = express.Router();
 const CONFIG = require('../utils/config');
 
+var jwtAuthz = require('express-jwt-authz');
+var scopeCheck = jwtAuthz(['read_write:ethsign'], { customUserKey: 'auth' })
+
 var jsonParser = bodyParser.json()
 let massageToSignMap = new Map()
 
@@ -21,7 +24,7 @@ function verifySignature(user, address, signature) {
     }
 }
 
-router.get('/msg', (req, res) => {
+router.get('/msg', scopeCheck, (req, res) => {
     let user = CONFIG.users.find(user => {
         return user.address == req.query.address
     })
@@ -57,7 +60,7 @@ router.post('/verify', (req, res) => {
     }
 })
 
-router.post('/update/document', jsonParser, async (req, res) => {
+router.post('/update/document', scopeCheck, jsonParser, async (req, res) => {
     try {
         let address = req.body.address
         let signature = req.body.signature
@@ -124,7 +127,7 @@ router.post('/insert/collection', jsonParser, async (req, res) => {
     }
 })
 
-router.post('/insert/document', jsonParser, async (req, res) => {
+router.post('/insert/document', scopeCheck, jsonParser, async (req, res) => {
     try {
         let address = req.body.address
         let signature = req.body.signature

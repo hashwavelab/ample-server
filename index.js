@@ -1,9 +1,25 @@
 const express = require('express')
-const ethSign = require('./api/auth')
-const read = require('./api/read')
+const ethsign = require('./api/ethsign')
+const db = require('./api/db')
 const cors = require('cors')
 const MongoClient = require('./utils/mongoClient')
 const Assembler = require('./assembler.js')
+
+const { expressjwt: expressJwt } = require('express-jwt');
+var jwksRsa = require('jwks-rsa');
+// var jwtAuthz = require('express-jwt-authz');
+
+const jwtCheck = expressJwt({
+    secret: jwksRsa.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: 'https://dev-pmw60n9g.us.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'https://ample.hashwave.io/api',
+    issuer: 'https://dev-pmw60n9g.us.auth0.com/',
+    algorithms: ['RS256']
+});
 
 global.globalMongoClient = new MongoClient();
 setTimeout(() => {
@@ -12,13 +28,21 @@ setTimeout(() => {
 
 const app = express()
 
+app.use(jwtCheck);
+
 var corsOptions = {
     origin: 'https://wavefront.hashwave.io',
 }
 app.use(cors(corsOptions));
 
-app.use('/auth', ethSign);
-app.use('/read', read);
+// var scopeCheck = jwtAuthz(['read:db'], { customUserKey: 'auth' })
+
+// app.get('/test', scopeCheck, async (req, res) => {
+//     res.status(200).send("ok");
+// })
+
+app.use('/ethsign', ethsign);
+app.use('/db', db);
 
 const port = 5005
 
